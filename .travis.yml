@@ -1,0 +1,16 @@
+sudo: required
+
+services:
+  - docker
+
+language: node_js
+
+node_js: 6
+
+after_success:
+  - npm run coverage
+  - if [ "$TRAVIS_BRANCH" == "master" ]; then
+    docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
+    docker build . -t robertstettner/drone-mvn-auth;
+    docker push robertstettner/drone-mvn-auth;
+    fi

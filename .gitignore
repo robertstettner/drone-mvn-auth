@@ -1,0 +1,7 @@
+.idea/
+.m2
+node_modules/
+coverage/
+.nyc_output/
+settings.xml
+npm-debug.log

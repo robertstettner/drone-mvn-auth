@@ -1,0 +1,27 @@
+{
+  "name": "drone-mvn-auth",
+  "version": "1.0.0",
+  "description": "Drone plugin for generating the `settings.xml` with the server authentication for a Maven repository",
+  "main": "index.js",
+  "scripts": {
+    "lint": "eslint .",
+    "pretest": "npm run lint",
+    "test": "npm run test:unit && npm run test:component",
+    "test:unit": "nyc --report-dir ./coverage/unit mocha test/unit.spec.js",
+    "test:component": "nyc --report-dir ./coverage/component mocha test/component.spec.js",
+    "posttest": "npm outdated -l || true",
+    "coverage": "cat ./coverage/unit/lcov.info | coveralls"
+  },
+  "author": "Robert Stettner <robert.stettner@gmail.com> (https://github.com/robertstettner)",
+  "license": "MIT",
+  "devDependencies": {
+    "coveralls": "2.13.1",
+    "eslint": "4.2.0",
+    "mocha": "3.4.2",
+    "nyc": "11.0.3",
+    "rewire": "2.5.2",
+    "should": "11.2.1",
+    "should-sinon": "0.0.5",
+    "sinon": "2.3.8"
+  }
+}
