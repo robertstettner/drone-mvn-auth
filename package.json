@@ -16,12 +16,12 @@
   "license": "MIT",
   "devDependencies": {
     "coveralls": "2.13.1",
-    "eslint": "4.2.0",
-    "mocha": "3.4.2",
-    "nyc": "11.0.3",
+    "eslint": "4.4.1",
+    "mocha": "3.5.0",
+    "nyc": "11.1.0",
     "rewire": "2.5.2",
     "should": "11.2.1",
     "should-sinon": "0.0.5",
-    "sinon": "2.3.8"
+    "sinon": "3.2.0"
   }
 }

@@ -21,7 +21,7 @@ function generateRepository (type) {
 }
 
 function generateProfile (profile) {
-    return `<profile><id>${profile.id}</id><repositories>${profile.repositories.map(generateRepository('repository')).join('')}</repositories><pluginRepositories>${profile.plugin_repositories.map(generateRepository('pluginRepository')).join('')}</pluginRepositories></profile>`;
+    return `<profile><id>${profile.id}</id><repositories>${profile.hasOwnProperty('repositories') ? profile.repositories.map(generateRepository('repository')).join('') : ''}</repositories><pluginRepositories>${profile.hasOwnProperty('plugin_repositories') ? profile.plugin_repositories.map(generateRepository('pluginRepository')).join('') : ''}</pluginRepositories></profile>`;
 }
 
 function generateActiveProfile (profile) {

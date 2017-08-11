@@ -53,7 +53,7 @@ describe('Unit tests: Drone Maven Auth', () => {
     });
     describe('generateProfile()', () => {
         const generateProfile = plugin.__get__('generateProfile');
-        it('should return interpolated profile template', () => {
+        it('should return interpolated profile template when provided with plugin repos and repos', () => {
             const generateRepositoryStub = sinon.stub().returns(() => 'dabba');
             const revert = plugin.__set__('generateRepository', generateRepositoryStub);
             generateProfile({
@@ -62,6 +62,26 @@ describe('Unit tests: Drone Maven Auth', () => {
                 plugin_repositories: [3]
             }).should.eql('<profile><id>123</id><repositories>dabbadabba</repositories><pluginRepositories>dabba</pluginRepositories></profile>');
             generateRepositoryStub.should.have.callCount(2);
+            revert();
+        });
+        it('should return interpolated profile template when provided with only plugin repos', () => {
+            const generateRepositoryStub = sinon.stub().returns(() => 'dabba');
+            const revert = plugin.__set__('generateRepository', generateRepositoryStub);
+            generateProfile({
+                id: 123,
+                plugin_repositories: [3, 4]
+            }).should.eql('<profile><id>123</id><repositories></repositories><pluginRepositories>dabbadabba</pluginRepositories></profile>');
+            generateRepositoryStub.should.have.callCount(1);
+            revert();
+        });
+        it('should return interpolated profile template when provided with only repos', () => {
+            const generateRepositoryStub = sinon.stub().returns(() => 'dabba');
+            const revert = plugin.__set__('generateRepository', generateRepositoryStub);
+            generateProfile({
+                id: 123,
+                repositories: [1, 2]
+            }).should.eql('<profile><id>123</id><repositories>dabbadabba</repositories><pluginRepositories></pluginRepositories></profile>');
+            generateRepositoryStub.should.have.callCount(1);
             revert();
         });
     });
