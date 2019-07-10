@@ -90,13 +90,6 @@ pipeline:
     image: robertstettner/drone-mvn-auth
     pull: true
     secrets: [ maven_servers ]
-    servers:
-      - id: release
-        username: ${NEXUS_USERNAME}
-        password: ${NEXUS_PASSWORD}
-      - id: snapshot
-        username: ${NEXUS_USERNAME}
-        password: ${NEXUS_PASSWORD}
     profiles:
       - id: my-profile
         repositories:
