@@ -32,9 +32,12 @@ rules:
   no-alert: 2
   indent:
     - 2
-    - 4
+    - 2
     - SwitchCase: 1
   no-var: 1
+  quotes:
+    - 2
+    - "single"
 
 parserOptions:
   sourceType: module
