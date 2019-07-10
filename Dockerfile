@@ -1,4 +1,4 @@
-FROM node:6-alpine
+FROM node:10-alpine
 
 WORKDIR /plugin
 
@@ -6,6 +6,6 @@ COPY . /plugin
 
 ENV NODE_ENV production
 
-RUN npm prune && npm install
+RUN npm ci
 
 ENTRYPOINT node /plugin/index.js
