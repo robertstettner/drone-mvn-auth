@@ -29,6 +29,10 @@ The following parameters are used to configure the plugin:
 - `active_profiles[]`: the active profiles
 - `debug`: debug mode (optional: set to `true` for verbose messages)
 
+### Secrets mode
+
+The secrets mode allows for usage of Drone secrets for parameters. For every parameter, the secret prefix to use is `maven_`. For example, for storing the `servers` parameter as a secret, the key would be `maven_servers`. The value for that parameter would still need to be serialised JSON. 
+
 ### Drone configuration example
 
 ```yaml
@@ -41,6 +45,51 @@ pipeline:
   authenticate:
     image: robertstettner/drone-mvn-auth
     pull: true
+    servers:
+      - id: release
+        username: ${NEXUS_USERNAME}
+        password: ${NEXUS_PASSWORD}
+      - id: snapshot
+        username: ${NEXUS_USERNAME}
+        password: ${NEXUS_PASSWORD}
+    profiles:
+      - id: my-profile
+        repositories:
+          - id: myRepo
+            name: Repository for my libraries
+            url: http://maven.my.com
+            layout: default
+        plugin_repositories:
+          - id: myRepo
+            name: Repository for my libraries
+            url: http://maven.my.com
+            layout: default
+    active_profiles:
+      - my-profile
+              
+    
+  deploy:
+    image: maven:3-alpine
+    commands:
+      - mvn clean deploy -gs settings.xml
+```
+
+### Drone configuration example with secrets
+
+The example below shows how to use the plugin with secrets.
+An example of the `servers` parameter value for the secret `maven_servers` could be: `[{"id": "release","username":"foo","password":"bar"}]`
+
+```yaml
+pipeline:
+  build:
+    image: maven:3-alpine
+    commands:
+      - mvn install -gs settings.xml
+      
+  authenticate:
+    image: robertstettner/drone-mvn-auth
+    pull: true
+    secrets: [ maven_servers ]
     servers:
       - id: release
         username: ${NEXUS_USERNAME}
