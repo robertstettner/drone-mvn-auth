@@ -1,4 +1,5 @@
 # drone-mvn-auth
+
 [![Build Status](https://travis-ci.org/robertstettner/drone-mvn-auth.svg?branch=master)](https://travis-ci.org/robertstettner/drone-mvn-auth)
 [![Coverage Status](https://coveralls.io/repos/github/robertstettner/drone-mvn-auth/badge.svg?branch=master)](https://coveralls.io/github/robertstettner/drone-mvn-auth?branch=master)
 
@@ -26,12 +27,13 @@ The following parameters are used to configure the plugin:
 - `profiles[].plugin_repositories[].name`: the profile's plugin repository name
 - `profiles[].plugin_repositories[].url`: the profile's plugin repository url
 - `profiles[].plugin_repositories[].layout`: the profile's plugin repository layout
+- `profiles[].properties[]`: (Optional) key value list of properties
 - `active_profiles[]`: the active profiles
 - `debug`: debug mode (optional: set to `true` for verbose messages)
 
 ### Secrets mode
 
-The secrets mode allows for usage of Drone secrets for parameters. For every parameter, the secret prefix to use is `maven_`. For example, for storing the `servers` parameter as a secret, the key would be `maven_servers`. The value for that parameter would still need to be serialised JSON. 
+The secrets mode allows for usage of Drone secrets for parameters. For every parameter, the secret prefix to use is `maven_`. For example, for storing the `servers` parameter as a secret, the key would be `maven_servers`. The value for that parameter would still need to be serialised JSON.
 
 ### Drone configuration example
 
@@ -41,7 +43,7 @@ pipeline:
     image: maven:3-alpine
     commands:
       - mvn install -gs settings.xml
-      
+
   authenticate:
     image: robertstettner/drone-mvn-auth
     pull: true
@@ -66,8 +68,7 @@ pipeline:
             layout: default
     active_profiles:
       - my-profile
-              
-    
+
   deploy:
     image: maven:3-alpine
     commands:
@@ -85,11 +86,11 @@ pipeline:
     image: maven:3-alpine
     commands:
       - mvn install -gs settings.xml
-      
+
   authenticate:
     image: robertstettner/drone-mvn-auth
     pull: true
-    secrets: [ maven_servers ]
+    secrets: [maven_servers]
     profiles:
       - id: my-profile
         repositories:
@@ -104,8 +105,7 @@ pipeline:
             layout: default
     active_profiles:
       - my-profile
-              
-    
+
   deploy:
     image: maven:3-alpine
     commands:
