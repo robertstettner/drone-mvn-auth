@@ -16,8 +16,10 @@ const generateServer = server =>
 const generateRepository = type => repo =>
   `<${type}><id>${repo.id}</id><name>${repo.name}</name><url>${repo.url}</url><layout>${repo.layout || 'default'}</layout></${type}>`;
 
+const generateProperty = map => key => `<${key}>${map[key]}</${key}>`;
+
 const generateProfile = profile =>
-  `<profile><id>${profile.id}</id><repositories>${profile.hasOwnProperty('repositories') ? profile.repositories.map(generateRepository('repository')).join('') : ''}</repositories><pluginRepositories>${profile.hasOwnProperty('plugin_repositories') ? profile.plugin_repositories
+  `<profile><id>${profile.id}</id>${profile.hasOwnProperty('properties') ? `<properties>${Object.keys(profile.properties).map(generateProperty(profile.properties)).join('')}</properties>` : ''}<repositories>${profile.hasOwnProperty('repositories') ? profile.repositories.map(generateRepository('repository')).join('') : ''}</repositories><pluginRepositories>${profile.hasOwnProperty('plugin_repositories') ? profile.plugin_repositories
     .map(generateRepository('pluginRepository')).join('') : ''}</pluginRepositories></profile>`;
 
 const generateActiveProfile = profile =>

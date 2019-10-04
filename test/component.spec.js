@@ -41,6 +41,22 @@ describe('Component tests: Drone Maven Auth', () => {
       actual.should.eql('<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd"><localRepository>undefined/.m2</localRepository><servers></servers><profiles><profile><id>aa</id><repositories><repository><id>aa</id><name>nexus</name><url>http://ip:8081/nexus/content/groups/public/</url><layout>default</layout></repository></repositories><pluginRepositories></pluginRepositories></profile></profiles><activeProfiles><activeProfile>aa</activeProfile></activeProfiles></settings>');
       revert();
     });
+    it('should profiles, properties and active profiles', () => {
+      const processMock = {
+        env: {
+          PLUGIN_PROFILES: '[{"id": 321, "repositories": [{"id": 765, "name": "escenic", "url": "http://me.co", "layout": "default"}], "properties": { "property.1": "value1", "property.2": "value2" }}]',
+          PLUGIN_ACTIVE_PROFILES: '321'
+        },
+        exit: () => { }
+      };
+      const revert = plugin.__set__('process', processMock);
+
+      plugin.init();
+      const actual = fs.readFileSync('settings.xml', 'UTF-8');
+
+      actual.should.eql('<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd"><localRepository>undefined/.m2</localRepository><servers></servers><profiles><profile><id>321</id><properties><property.1>value1</property.1><property.2>value2</property.2></properties><repositories><repository><id>765</id><name>escenic</name><url>http://me.co</url><layout>default</layout></repository></repositories><pluginRepositories></pluginRepositories></profile></profiles><activeProfiles><activeProfile>321</activeProfile></activeProfiles></settings>');
+      revert();
+    });
   });
   describe('with secrets', () => {
     it('should produce servers, profiles, and active profiles', () => {
