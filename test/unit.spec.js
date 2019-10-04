@@ -50,6 +50,15 @@ describe('Unit tests: Drone Maven Auth', () => {
         layout: 'default'
       }).should.eql('<myType><id>123</id><name>bobo</name><url>http://www.google.com</url><layout>default</layout></myType>');
     });
+    it('should set layout to default if missing', () => {
+      generateRepository('myType')({
+        id: 123,
+        name: 'bobo',
+        url: 'http://www.google.com'
+      }).should.eql(
+        '<myType><id>123</id><name>bobo</name><url>http://www.google.com</url><layout>default</layout></myType>'
+      );
+    });
   });
   describe('generateProfile()', () => {
     const generateProfile = plugin.__get__('generateProfile');
@@ -81,6 +90,25 @@ describe('Unit tests: Drone Maven Auth', () => {
         id: 123,
         repositories: [1, 2]
       }).should.eql('<profile><id>123</id><repositories>dabbadabba</repositories><pluginRepositories></pluginRepositories></profile>');
+      generateRepositoryStub.should.have.callCount(1);
+      revert();
+    });
+    it('should return properties for profile', () => {
+      const generateRepositoryStub = sinon.stub().returns(() => 'dabba');
+      const revert = plugin.__set__(
+        'generateRepository',
+        generateRepositoryStub
+      );
+      generateProfile({
+        id: 123,
+        repositories: [1, 2],
+        properties: {
+          'property.1': 'value1',
+          'property.2': 'value2'
+        }
+      }).should.eql(
+        '<profile><id>123</id><properties><property.1>value1</property.1><property.2>value2</property.2></properties><repositories>dabbadabba</repositories><pluginRepositories></pluginRepositories></profile>'
+      );
       generateRepositoryStub.should.have.callCount(1);
       revert();
     });
