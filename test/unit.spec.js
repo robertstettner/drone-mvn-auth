@@ -50,6 +50,15 @@ describe('Unit tests: Drone Maven Auth', () => {
         layout: 'default'
       }).should.eql('<myType><id>123</id><name>bobo</name><url>http://www.google.com</url><layout>default</layout></myType>');
     });
+    it('should set layout to default if missing', () => {
+      generateRepository('myType')({
+        id: 123,
+        name: 'bobo',
+        url: 'http://www.google.com'
+      }).should.eql(
+        '<myType><id>123</id><name>bobo</name><url>http://www.google.com</url><layout>default</layout></myType>'
+      );
+    });
   });
   describe('generateProfile()', () => {
     const generateProfile = plugin.__get__('generateProfile');
